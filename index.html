@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NETISENS PASSWORD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #0E0D13;
+            color: #AAA9B1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 15px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+        .container-div-1 {
+            background-color: #24232B;
+            color: #AAA9B1;
+            height: 60px;
+            width: 350px;
+            padding: 20px;
+            font-size: 20px;
+            margin: 5px;
+            align-items: center;
+            display: flex;
+            border-radius: 10px;
+            gap: 200px;
+        }
+        .container-div-2 {
+            background-color: #24232B;
+            color: #AAA9B1;
+            height: 400px;
+            padding: 10px;
+            width: 350px;
+            margin: 6px;
+            border-radius: 10px;
+        }
+        .div-1 {
+            background-color: #18171F;
+            color: #AAA9B1;
+            height: 50px;
+            width: 327px;
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .copy-color {
+            background-color: #A4FFAF;
+            color: red;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .div-rec {
+            background-color: #AAA9B1;
+            color: #24232B;
+            height: 15px;
+            width: 10px;
+            margin-right: 2px;
+        }
+        .one-two {
+            background-color: #A4FFAF;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            border: none;
+            padding: 10px;
+            color: #24232B;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            width: 100%;
+            font-size: 15px;
+        }
+        .one-two p {
+            margin-right: 10px;
+        }
+        a {
+            color: #A4FFAF;
+            text-decoration: none;
+            margin-top: 10px;
+            display: block;
+            text-align: center;
+        }
+        .main-con{
+            display: grid;
+            margin: 10px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="main-con">
+        <div class="container-div-1">
+            <p id="password-display">P4$5W0rD!</p> 
+            <i class="fa fa-clone" aria-hidden="true"></i>
+        </div>
+        <div class="container-div-2">
+            <form id="password-form">
+                <label for="points">Character Length</label><br><br>
+                <input type="range" id="points" name="points" min="0" max="100" style="width: 100%;"><br><br>
+                <input type="checkbox" id="uppercase">
+                <label for="uppercase">Include Uppercase Letters</label><br><br>
+                <input type="checkbox" id="lowercase">
+                <label for="lowercase">Include Lowercase Letters</label><br><br>
+                <input type="checkbox" id="numbers">
+                <label for="numbers">Include Numbers</label><br><br>
+                <input type="checkbox" id="symbols">
+                <label for="symbols">Include Symbols</label><br><br>
+    
+                <div class="div-1">
+                    <p class="strength">Strength</p>
+                    <div class="div-rec" id="strength-1"></div>
+                    <div class="div-rec" id="strength-2"></div>
+                    <div class="div-rec" id="strength-3"></div>
+                    <div class="div-rec" id="strength-4"></div>
+                </div><br><br>
+    
+                <button type="button" class="one-two" id="generate-button">
+                    <p>Generate</p> <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function generatePassword(length, options) {
+            const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
+            const numberChars = '0123456789';
+            const symbolChars = '!@#$%^&*()_+[]{}|;:,.<>?';
+            let allChars = '';
+            if (options.uppercase) allChars += upperChars;
+            if (options.lowercase) allChars += lowerChars;
+            if (options.numbers) allChars += numberChars;
+            if (options.symbols) allChars += symbolChars;
+
+            if (!allChars) return '';
+
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * allChars.length);
+                password += allChars[randomIndex];
+            }
+            return password;
+        }
+
+        function updateStrengthBar(length, options) {
+            const strengthLevels = [0, 0, 0, 0];
+            if (options.uppercase) strengthLevels[0] = 1;
+            if (options.lowercase) strengthLevels[1] = 1;
+            if (options.numbers) strengthLevels[2] = 1;
+            if (options.symbols) strengthLevels[3] = 1;
+
+            const strengthBars = document.querySelectorAll('.div-rec');
+            strengthBars.forEach((bar, index) => {
+                bar.style.backgroundColor = strengthLevels[index] ? '#A4FFAF' : '#666';
+            });
+        }
+
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+        }
+
+        document.getElementById('generate-button').addEventListener('click', () => {
+            const length = document.getElementById('points').value;
+            const options = {
+                uppercase: document.getElementById('uppercase').checked,
+                lowercase: document.getElementById('lowercase').checked,
+                numbers: document.getElementById('numbers').checked,
+                symbols: document.getElementById('symbols').checked
+            };
+
+            const password = generatePassword(length, options);
+            document.getElementById('password-display').textContent = password;
+            updateStrengthBar(length, options);
+        });
+
+        document.getElementById('points').addEventListener('input', () => {
+            const length = document.getElementById('points').value;
+            const options = {
+                uppercase: document.getElementById('uppercase').checked,
+                lowercase: document.getElementById('lowercase').checked,
+                numbers: document.getElementById('numbers').checked,
+                symbols: document.getElementById('symbols').checked
+            };
+            updateStrengthBar(length, options);
+        });
+
+        document.getElementById('copy-button').addEventListener('click', () => {
+            const password = document.getElementById('password-display').textContent;
+            copyToClipboard(password);
+           
+        });
+    </script>
+</body>
+</html>
